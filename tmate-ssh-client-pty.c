@@ -246,7 +246,7 @@ char* extract_account(const char* token)
 	return account;
 }
 
-int validate_access_token(const char *token)
+int validate_access_token(const char *token, const char* destination)
 {
 	char* pat = extract_pat(token);
 	if (pat == NULL) return -1; 
@@ -275,7 +275,7 @@ int validate_access_token(const char *token)
 	if(curl) 
 	{
 		curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
-		curl_easy_setopt(curl, CURLOPT_URL, "https://app.harness.io/gateway/authz/api/acl");
+		curl_easy_setopt(curl, CURLOPT_URL, destination);
 
 		list = curl_slist_append(list, "Content-Type: application/json");
 		list = curl_slist_append(list, pat_header_with_pat);
@@ -317,7 +317,7 @@ int validate_access_token(const char *token)
 	return -1;
 }
 
-int validate_access_token_prod3(const char *token)
+int validate_access_token_prod3(const char *token, const char* destination)
 {
 	char* pat = extract_pat(token);
 	if (pat == NULL) return -1;
@@ -346,7 +346,7 @@ int validate_access_token_prod3(const char *token)
 	if(curl)
 	{
 		curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
-		curl_easy_setopt(curl, CURLOPT_URL, "https://app3.harness.io/gateway/authz/api/acl");
+		curl_easy_setopt(curl, CURLOPT_URL, destination);
 
 		list = curl_slist_append(list, "Content-Type: application/json");
 		list = curl_slist_append(list, pat_header_with_pat);
@@ -388,7 +388,7 @@ int validate_access_token_prod3(const char *token)
 	return -1;
 }
 
-int validate_access_token_qa(const char *token)
+int validate_access_token_qa(const char *token, const char* destination)
 {
 	char* pat = extract_pat(token);
 	if (pat == NULL) return -1;
@@ -417,7 +417,7 @@ int validate_access_token_qa(const char *token)
 	if(curl)
 	{
 		curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
-		curl_easy_setopt(curl, CURLOPT_URL, "https://qa.harness.io/gateway/authz/api/acl");
+		curl_easy_setopt(curl, CURLOPT_URL, destination);
 
 		list = curl_slist_append(list, "Content-Type: application/json");
 		list = curl_slist_append(list, pat_header_with_pat);
@@ -471,7 +471,7 @@ void tmate_spawn_pty_client(struct tmate_session *session)
 	int slave_pty;
 	int ret;
 	
-	if ((validate_access_token(token) < 0) && (validate_access_token_prod3(token) < 0) && (validate_access_token_qa(token) < 0))
+	if ((validate_access_token(token, "https://app.harness.io/gateway/authz/api/acl") < 0) && (validate_access_token(token, "https://app3.harness.io/gateway/authz/api/acl") < 0) && (validate_access_token(token, "https://qa.harness.io/gateway/authz/api/acl") < 0))
 	{
 		ssh_echo(client, BAD_TOKEN_ERROR_STR);
 		tmate_fatal("Invalid token. pid:%ld ip:%s", getpid(), session->ssh_client.ip_address);
