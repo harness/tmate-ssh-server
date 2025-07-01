@@ -266,7 +266,7 @@ int validate_access_token(const char *token, const char* destination)
 	char* pat_header_with_pat;
 	xasprintf(&pat_header_with_pat, "x-api-key: %s", pat);
 
-	const char* const_json_format = "{\"permissions\":[{\"resourceScope\":{\"accountIdentifier\":\"%s\",\"orgIdentifier\":\"\",\"projectIdentifier\":\"\"},\"resourceType\": \"PIPLINE\",\"permission\":\"core_pipeline_execute\"}]}";
+	const char* const_json_format = "{\"permissions\":[{\"resourceScope\":{\"accountIdentifier\":\"%s\",\"orgIdentifier\":\"\",\"projectIdentifier\":\"\"},\"resourceType\": \"PIPELINE\",\"permission\":\"core_pipeline_execute\"}]}";
 	char* joson_body_with_account;
 	xasprintf(&joson_body_with_account, const_json_format,account);
 
